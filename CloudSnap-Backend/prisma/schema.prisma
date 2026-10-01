@@ -1,0 +1,189 @@
+// CloudSnap 数据库模型
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ===== 用户 =====
+model User {
+  id            String   @id @default(cuid())
+  phone         String?  @unique
+  email         String?  @unique
+  password      String?
+  name          String
+  avatar        String?
+  platform      String   @default("android")
+  plan          String   @default("free")
+  wechatOpenId  String?  @unique
+  googleSub     String?  @unique
+  appleSub      String?  @unique
+  faceToken     String?
+  fcmToken      String?
+  apnsToken     String?
+  storageUsed   BigInt   @default(0)
+  storageLimit  BigInt   @default(2147483648)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  sessions      SessionParticipant[]
+  photos        Photo[]
+  // 用户创建的会话（补充与 Session.creator 的对称关系）
+  createdSessions Session[] @relation("Creator")
+  sentRequests  Friendship[] @relation("Requester")
+  receivedRequests Friendship[] @relation("Addressee")
+  invites       SessionInvite[]
+  subscriptions Subscription[]
+
+  @@index([phone])
+  @@index([email])
+}
+
+// ===== 拍摄会话 =====
+model Session {
+  id           String   @id @default(cuid())
+  name         String
+  creatorId    String
+  captureDays  Int
+  captureStart DateTime
+  captureEnd   DateTime
+  storageEnd   DateTime
+  status       String   @default("active")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  creator      User     @relation("Creator", fields: [creatorId], references: [id])
+  participants SessionParticipant[]
+  photos       Photo[]
+  invites      SessionInvite[]
+
+  @@index([creatorId])
+  @@index([status])
+}
+
+model SessionParticipant {
+  id        String   @id @default(cuid())
+  sessionId String
+  userId    String
+  role      String   @default("member")
+
+  session   Session  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([sessionId, userId])
+}
+
+// ===== 照片 =====
+model Photo {
+  id            String   @id @default(cuid())
+  filename      String
+  originalName  String
+  mimeType      String
+  size          Int
+  width         Int?
+  height        Int?
+  url           String
+  thumbnailUrl  String?
+  aiCategory    String?
+  aiTags        String?
+  aiDescription String?
+  isFavorite    Boolean  @default(false)
+  isShared      Boolean  @default(false)
+  sharedFrom    String?
+  gps           Json?
+  location      String?
+  isUploaded    Boolean  @default(true)
+  uploadProgress Int?
+  capturedAt    DateTime?
+  expiresAt     DateTime?
+  expiryNotified Boolean @default(false)
+  deletedAt     DateTime?
+  userId        String
+  sessionId     String?
+  faceGroupId   String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  session       Session? @relation(fields: [sessionId], references: [id], onDelete: SetNull)
+  // 与 FaceGroup 的对称关系
+  faceGroup     FaceGroup? @relation(fields: [faceGroupId], references: [id], onDelete: SetNull)
+  uploader      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([sessionId])
+  @@index([expiresAt])
+  @@index([deletedAt])
+}
+
+// ===== 好友关系 =====
+model Friendship {
+  id          String   @id @default(cuid())
+  requesterId String
+  addresseeId String
+  message     String?
+  status      String   @default("PENDING")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  requester   User     @relation("Requester", fields: [requesterId], references: [id], onDelete: Cascade)
+  addressee   User     @relation("Addressee", fields: [addresseeId], references: [id], onDelete: Cascade)
+
+  @@unique([requesterId, addresseeId])
+  @@index([addresseeId, status])
+  @@index([requesterId, status])
+}
+
+// ===== 邀请链接 =====
+model SessionInvite {
+  id        String   @id @default(cuid())
+  sessionId String
+  inviterId String
+  code      String   @unique
+  usedBy    String?
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  session   Session  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  inviter   User     @relation(fields: [inviterId], references: [id], onDelete: Cascade)
+
+  @@index([code])
+  @@index([expiresAt])
+}
+
+// ===== 订阅记录 =====
+model Subscription {
+  id              String   @id @default(cuid())
+  userId          String
+  plan            String
+  platform        String
+  productId       String
+  purchaseToken   String
+  transactionId   String?
+  status          String   @default("active")
+  startedAt       DateTime @default(now())
+  expiresAt       DateTime?
+  cancelledAt     DateTime?
+
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([status])
+}
+
+// ===== 人脸分组 =====
+model FaceGroup {
+  id        String   @id @default(cuid())
+  userId    String
+  name      String   @default("未命名")
+  faceToken String
+  photoCount Int     @default(0)
+  firstSeen DateTime @default(now())
+
+  photos    Photo[]
+
+  @@index([userId])
+}
