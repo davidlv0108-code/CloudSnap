@@ -247,3 +247,28 @@
 2026/10/01 16:57:56 [emerg] 1#1: host not found in upstream "backend:3000" in /etc/nginx/nginx.conf:53
 2026/10/01 16:59:00 [emerg] 1#1: host not found in upstream "backend:3000" in /etc/nginx/nginx.conf:53
 2026/10/01 17:00:03 [emerg] 1#1: host not found in upstream "backend:3000" in /etc/nginx/nginx.conf:53
+2026/10/01 17:01:07 [emerg] 1#1: host not found in upstream "backend:3000" in /etc/nginx/nginx.conf:53
+2026/10/01 17:02:10 [emerg] 1#1: host not found in upstream "backend:3000" in /etc/nginx/nginx.conf:53
+2026/10/01 17:03:14 [emerg] 1#1: host not found in upstream "backend:3000" in /etc/nginx/nginx.conf:53
+2026/10/01 17:04:17 [emerg] 1#1: host not found in upstream "backend:3000" in /etc/nginx/nginx.conf:53
+2026/10/01 17:05:21 [emerg] 1#1: host not found in upstream "backend:3000" in /etc/nginx/nginx.conf:53
+2026/10/01 17:06:25 [emerg] 1#1: host not found in upstream "backend:3000" in /etc/nginx/nginx.conf:53
+2026/10/01 17:07:28 [warn] 1#1: the "listen ... http2" directive is deprecated, use the "http2" directive instead in /etc/nginx/nginx.conf:80
+2026/10/01 17:07:28 [warn] 1#1: the "listen ... http2" directive is deprecated, use the "http2" directive instead in /etc/nginx/nginx.conf:81
+2026/10/01 17:07:28 [warn] 1#1: the "listen ... http2" directive is deprecated, use the "http2" directive instead in /etc/nginx/nginx.conf:167
+2026/10/01 17:07:28 [warn] 1#1: the "listen ... http2" directive is deprecated, use the "http2" directive instead in /etc/nginx/nginx.conf:168
+2026/10/01 17:07:28 [warn] 1#1: the "listen ... http2" directive is deprecated, use the "http2" directive instead in /etc/nginx/nginx.conf:207
+2026/10/01 17:07:28 [warn] 1#1: the "listen ... http2" directive is deprecated, use the "http2" directive instead in /etc/nginx/nginx.conf:208
+2026/10/01 17:07:28 [emerg] 1#1: cannot load certificate "/etc/nginx/certs/fullchain.pem": BIO_new_file() failed (SSL: error:80000002:system library::No such file or directory:calling fopen(/etc/nginx/certs/fullchain.pem, r) error:10000080:BIO routines::no such file)
+2026/10/01 17:08:31 [emerg] 1#1: host not found in upstream "backend:3000" in /etc/nginx/nginx.conf:53
+2026/10/01 17:09:35 [emerg] 1#1: host not found in upstream "backend:3000" in /etc/nginx/nginx.conf:53
+2026/10/01 17:10:38 [emerg] 1#1: host not found in upstream "backend:3000" in /etc/nginx/nginx.conf:53
+2026/10/01 17:11:42 [emerg] 1#1: host not found in upstream "backend:3000" in /etc/nginx/nginx.conf:53
+2026/10/01 17:12:45 [emerg] 1#1: host not found in upstream "backend:3000" in /etc/nginx/nginx.conf:53
+2026/10/01 17:13:49 [emerg] 1#1: host not found in upstream "backend:3000" in /etc/nginx/nginx.conf:53
+2026/10/01 17:14:52 [emerg] 1#1: host not found in upstream "backend:3000" in /etc/nginx/nginx.conf:53
+2026/10/01 17:15:56 [emerg] 1#1: host not found in upstream "backend:3000" in /etc/nginx/nginx.conf:53
+2026/10/01 17:17:00 [emerg] 1#1: host not found in upstream "backend:3000" in /etc/nginx/nginx.conf:53
+2026/10/01 17:18:03 [emerg] 1#1: host not found in upstream "backend:3000" in /etc/nginx/nginx.conf:53
+2026/10/01 17:19:07 [emerg] 1#1: host not found in upstream "backend:3000" in /etc/nginx/nginx.conf:53
+2026/10/01 17:20:10 [emerg] 1#1: host not found in upstream "backend:3000" in /etc/nginx/nginx.conf:53
