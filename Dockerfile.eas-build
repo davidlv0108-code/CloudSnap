@@ -1,0 +1,37 @@
+# Dockerfile.eas-build
+# Use this for building production APK/IPA with Expo EAS
+FROM node:20-alpine
+
+LABEL description="CloudSnap Mobile - EAS Build Container"
+
+WORKDIR /app
+
+# Install build requirements
+RUN apk add --no-cache \
+    bash \
+    curl \
+    git \
+    openjdk11 \
+    android-tools \
+    jq
+
+# Install Expo & EAS CLI
+RUN npm install -g expo-cli eas-cli --silent && npm cache clean --force
+
+# Copy app
+COPY package.json package-lock.json ./
+RUN npm ci --silent && npm cache clean --force
+
+COPY . .
+
+# Create build user
+RUN addgroup -g 1001 -S builder && \
+    adduser -S builder -u 1001 && \
+    chown -R builder:builder /app
+
+USER builder
+
+# Build script
+RUN mkdir -p /app/builds
+
+CMD ["bash", "-c", "echo 'Use: docker run -v $(pwd)/builds:/app/builds <image> eas build --platform android --local --output /app/builds/app.apk'"]
